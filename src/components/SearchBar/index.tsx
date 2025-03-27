@@ -29,7 +29,7 @@ const SearchBar = ({
 
     debounceRef.current = setTimeout(() => {
       onSearch(query);
-    }, 500); // Aguarda 500ms antes de buscar
+    }, 500);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);

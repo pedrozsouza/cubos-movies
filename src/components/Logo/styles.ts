@@ -22,9 +22,9 @@ export const LogoSVG = styled.svg`
 `;
 
 export const LogoText = styled.span`
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
   text-align: center;
-  margin-left: 0.75rem;
+  margin: 0 0 0.1rem 0.75rem;
   color: ${({ theme }) => theme.colors.header.text};
 `;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import Image from "next/image";
 import Header from "@/components/Header";
@@ -33,10 +33,12 @@ export default function HomePage() {
 
   const { movies, totalPages, isLoading } = discoverMoviesResult;
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    setCurrentPage(1);
-  };
+  const handleSearch = useMemo(() => {
+    return (query: string) => {
+      setSearchQuery(query);
+      setCurrentPage(1);
+    };
+  }, [setCurrentPage, setSearchQuery]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
