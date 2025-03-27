@@ -5,14 +5,21 @@ export const PaginationContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin: 2rem 0;
+
+  .leftArrow{
+    rotate: 270deg;
+  }
+  .rightArrow{
+    rotate: 90deg;
+  }
 `
 
 export const PageButton = styled.button<{ $isActive?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 2.3rem;
+  height: 2.3rem;
   margin: 0 0.25rem;
   border-radius: 4px;
   background-color: ${({ $isActive, theme }) => ($isActive ? theme.colors.primary : theme.colors.card)};

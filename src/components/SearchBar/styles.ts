@@ -10,8 +10,8 @@ export const SearchContainer = styled.div`
 `;
 
 export const SearchInput = styled.input`
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 3rem;
+  width: 35rem;
+  padding: 0.75rem 1rem 0.75rem 1rem;
   border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.input.background};
   border: 1px solid ${({ theme }) => theme.colors.input.border};
@@ -28,23 +28,26 @@ export const SearchInput = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.colors.input.placeholder};
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const SearchIcon = styled.div`
   position: absolute;
-  left: 1rem;
+  right: 3.5rem;
   top: 50%;
   transform: translateY(-50%);
   color: ${({ theme }) => theme.colors.text.tertiary};
-  pointer-events: none;
 `;
 
 export const FilterButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 2.3rem;
+  height: 2.3rem;
   border-radius: 4px;
   background-color: transparent;
   color: ${({ theme }) => theme.colors.text.primary};

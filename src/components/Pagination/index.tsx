@@ -46,7 +46,7 @@ const Pagination = ({
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        <ChevronIcon />
+        <ChevronIcon className="leftArrow" />
       </S.PageButton>
 
       {renderPageButtons()}
@@ -55,7 +55,7 @@ const Pagination = ({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        <ChevronIcon />
+        <ChevronIcon className="rightArrow"/>
       </S.PageButton>
     </S.PaginationContainer>
   );

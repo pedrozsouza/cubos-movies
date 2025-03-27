@@ -1,6 +1,7 @@
 import { GenresProvider } from "@/context/GenresContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { StyledComponentsRegistry } from "@/lib/registry";
+import { GlobalStyle } from "@/styles/globalStyles";
 
 export default function RootLayout({
   children,
@@ -12,7 +13,10 @@ export default function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <ThemeProvider>
-            <GenresProvider>{children}</GenresProvider>
+            <GenresProvider>
+              <GlobalStyle />
+              {children}
+            </GenresProvider>
           </ThemeProvider>
         </StyledComponentsRegistry>
       </body>

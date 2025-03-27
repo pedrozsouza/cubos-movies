@@ -90,7 +90,7 @@ export const Button = styled.button`
 
 export const PrimaryButton = styled(Button)`
   background-color: ${({ theme }) => theme.colors.primary};
-  color: white;
+  color: ${({ theme }) => theme.colors.text.primary};
   border: none;
 
   &:hover {
@@ -103,8 +103,7 @@ export const PrimaryButton = styled(Button)`
 `;
 
 export const SecondaryButton = styled(Button)`
-  background-color: ${({ theme }) => theme.colors.secondary};
-  color: white;
+  background-color: ${({ theme }) => theme.colors.tertiary};
   border: none;
 
   &:hover {

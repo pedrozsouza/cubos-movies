@@ -5,56 +5,56 @@ import type {
   GenresResponse,
 } from "@/types/movie";
 import { api } from "@/services/api";
+import {
+  useCurrentFilters,
+  useCurrentPage,
+  useSearchQuery,
+} from "@/store/useFilterStore";
 
-// Define o fetcher diretamente nos hooks
+
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
-export function usePopularMovies(page = 1) {
+const getKey = (
+  searchQuery: string,
+  currentPage: number,
+  year?: number,
+  genre?: number,
+  sortBy?: string
+) => {
+  const params = new URLSearchParams({
+    page: currentPage.toString(),
+    include_adult: "false",
+  });
+
+  if (searchQuery) {
+    params.set("query", searchQuery);
+    return [`/search/movie`, params.toString()];
+  }
+
+  if (year) params.set("primary_release_year", year.toString());
+  if (genre) params.set("with_genres", genre.toString());
+  if (sortBy) params.set("sort_by", sortBy);
+
+  return [`/discover/movie`, params.toString()];
+};
+
+export function useDiscoverMovies() {
+  const { year, genre, sortBy } = useCurrentFilters();
+  const searchQuery = useSearchQuery();
+  const currentPage = useCurrentPage();
+
   const { data, error, isLoading, mutate } = useSWR<MovieResponse>(
-    `/movie/popular?page=${page}`,
-    fetcher
+    getKey(searchQuery, currentPage, year, genre, sortBy),
+    ([url, params]: [string, string]) => fetcher(`${url}?${params}`)
   );
 
   return {
     movies: data?.results || [],
     totalPages: data?.total_pages || 0,
     totalResults: data?.total_results || 0,
-    error,
     isLoading,
-    mutate,
-  };
-}
-
-export function useSearchMovies(query: string, page = 1) {
-  const { data, error, isLoading, mutate } = useSWR<MovieResponse>(
-    query ? `/search/movie?query=${query}&page=${page}` : null,
-    fetcher
-  );
-
-  return {
-    movies: data?.results || [],
-    totalPages: data?.total_pages || 0,
-    totalResults: data?.total_results || 0,
     error,
-    isLoading,
-    mutate,
-  };
-}
-
-export function useDiscoverMovies(params: Record<string, any>) {
-  const paramString = new URLSearchParams(params).toString();
-  const { data, error, isLoading, mutate } = useSWR<MovieResponse>(
-    `/discover/movie?${paramString}`,
-    fetcher
-  );
-
-  return {
-    movies: data?.results || [],
-    totalPages: data?.total_pages || 0,
-    totalResults: data?.total_results || 0,
-    error,
-    isLoading,
-    mutate,
+    revalidate: mutate,
   };
 }
 

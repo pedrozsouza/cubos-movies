@@ -1,57 +1,47 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
+import { useRef } from "react";
 
-import { useState } from "react"
-import * as S from "./styles"
-import { useGenresContext } from "@/context/GenresContext"
-import ChevronIcon from "@/ui/icons/Chevron"
+import * as S from "./styles";
+import { useGenresContext } from "@/context/GenresContext";
+import ChevronIcon from "@/ui/icons/Chevron";
+import { useCurrentFilters, useFilterActions } from "@/store/useFilterStore";
 
 export type FilterValues = {
-  year?: number
-  genre?: number
-  sortBy?: string
-}
+  year?: number;
+  genre?: number;
+  sortBy?: string;
+};
 
-interface FiltersProps {
-  onApplyFilters: (filters: FilterValues) => void
-  onResetFilters: () => void
-  initialFilters?: FilterValues
-}
+const Filters = () => {
+  const { genres, isLoading } = useGenresContext();
+  const { year, genre, sortBy } = useCurrentFilters();
+  const { setFilters, resetFilters } = useFilterActions();
 
-const Filters = ({ onApplyFilters, onResetFilters, initialFilters = {} }: FiltersProps) => {
-  const { genres, isLoading } = useGenresContext()
-  const [year, setYear] = useState<string>(initialFilters.year?.toString() || "")
-  const [genre, setGenre] = useState<string>(initialFilters.genre?.toString() || "")
-  const [sortBy, setSortBy] = useState<string>(initialFilters.sortBy || "popularity.desc")
+  const yearRef = useRef(year?.toString() || "");
+  const genreRef = useRef(genre?.toString() || "");
+  const sortByRef = useRef(sortBy);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const filters: FilterValues = {
-      sortBy,
-    }
-
-    if (year) {
-      filters.year = Number.parseInt(year)
-    }
-
-    if (genre) {
-      filters.genre = Number.parseInt(genre)
-    }
-
-    onApplyFilters(filters)
-  }
+    setFilters({
+      year: yearRef.current ? Number(yearRef.current) : undefined,
+      genre: genreRef.current ? Number(genreRef.current) : undefined,
+      sortBy: sortByRef.current,
+    });
+  };
 
   const handleReset = () => {
-    setYear("")
-    setGenre("")
-    setSortBy("popularity.desc")
-    onResetFilters()
-  }
+    resetFilters();
+    yearRef.current = "";
+    genreRef.current = "";
+    sortByRef.current = "popularity.desc";
+  };
 
-  const currentYear = new Date().getFullYear()
-  const years = Array.from({ length: 50 }, (_, i) => currentYear - i)
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
 
   return (
     <S.FiltersContainer>
@@ -62,8 +52,8 @@ const Filters = ({ onApplyFilters, onResetFilters, initialFilters = {} }: Filter
           <S.SelectWrapper>
             <S.FilterSelect
               id="year"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
+              defaultValue={yearRef.current}
+              onChange={(e) => (yearRef.current = e.target.value)}
             >
               <option value="">Todos os anos</option>
               {years.map((y) => (
@@ -83,8 +73,8 @@ const Filters = ({ onApplyFilters, onResetFilters, initialFilters = {} }: Filter
           <S.SelectWrapper>
             <S.FilterSelect
               id="genre"
-              value={genre}
-              onChange={(e) => setGenre(e.target.value)}
+              defaultValue={genreRef.current}
+              onChange={(e) => (genreRef.current = e.target.value)}
             >
               <option value="">Todos os gêneros</option>
               {!isLoading &&
@@ -105,8 +95,8 @@ const Filters = ({ onApplyFilters, onResetFilters, initialFilters = {} }: Filter
           <S.SelectWrapper>
             <S.FilterSelect
               id="sortBy"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
+              defaultValue={sortByRef.current}
+              onChange={(e) => (sortByRef.current = e.target.value)}
             >
               <option value="popularity.desc">Popularidade (maior)</option>
               <option value="popularity.asc">Popularidade (menor)</option>
@@ -136,7 +126,6 @@ const Filters = ({ onApplyFilters, onResetFilters, initialFilters = {} }: Filter
       </S.FilterForm>
     </S.FiltersContainer>
   );
-}
+};
 
-export default Filters
-
+export default Filters;

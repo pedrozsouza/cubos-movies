@@ -1,86 +1,37 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import Image from "next/image";
 import Header from "@/components/Header";
 import SearchBar from "@/components/SearchBar";
 import Pagination from "@/components/Pagination";
 import Footer from "@/components/Footer";
-import Filters, { type FilterValues } from "@/components/Filters";
+import Filters from "@/components/Filters";
 import { lightTheme, darkTheme } from "@/styles/theme";
 import * as S from "../styles/page/styles";
 import MovieCard from "@/components/MovieCard";
 import { useTheme } from "@/context/ThemeContext";
+import { useDiscoverMovies } from "@/hooks/useMovies";
 import {
-  useDiscoverMovies,
-  usePopularMovies,
-  useSearchMovies,
-} from "@/hooks/useMovies";
+  useCurrentPage,
+  useFilterActions,
+  useSearchQuery,
+} from "@/store/useFilterStore";
 
 export default function HomePage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchQuery = useSearchQuery();
+  const currentPage = useCurrentPage();
   const { theme } = useTheme();
   const currentTheme = theme === "dark" ? darkTheme : lightTheme;
-
-  const initialQuery = searchParams.get("query") || "";
-  const initialPage = Number(searchParams.get("page")) || 1;
-  const initialFilters: FilterValues = {
-    year: searchParams.get("year")
-      ? Number(searchParams.get("year"))
-      : undefined,
-    genre: searchParams.get("genre")
-      ? Number(searchParams.get("genre"))
-      : undefined,
-    sortBy: searchParams.get("sort_by") || "popularity.desc",
-  };
-
-  const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [currentPage, setCurrentPage] = useState(initialPage);
   const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState(initialFilters);
+  const [showIconFilters, setShowIconFilters] = useState(true);
 
-  // Define os parâmetros de pesquisa dinamicamente
-  const searchParamsObj = useMemo(
-    () => ({
-      query: searchQuery,
-      page: currentPage,
-      year: filters.year,
-    }),
-    [searchQuery, currentPage, filters.year]
-  );
+  const { setSearchQuery, setCurrentPage } = useFilterActions();
 
-  const discoverParams = useMemo(
-    () => ({
-      page: currentPage,
-      primary_release_year: filters.year,
-      with_genres: filters.genre?.toString(),
-      sort_by: filters.sortBy,
-    }),
-    [currentPage, filters]
-  );
+  const discoverMoviesResult = useDiscoverMovies();
 
-  const popularMoviesResult = usePopularMovies(currentPage);
-  const discoverMoviesResult = useDiscoverMovies(discoverParams);
-
-  const { movies, totalPages, isLoading } = popularMoviesResult;
-
-  // Atualiza os parâmetros da URL
-  useEffect(() => {
-    const params = new URLSearchParams();
-
-    if (searchQuery) params.set("query", searchQuery);
-    if (currentPage > 1) params.set("page", String(currentPage));
-    if (filters.year) params.set("year", String(filters.year));
-    if (filters.genre) params.set("genre", String(filters.genre));
-    if (filters.sortBy && filters.sortBy !== "popularity.desc") {
-      params.set("sort_by", filters.sortBy);
-    }
-
-    router.replace(`?${params.toString()}`);
-  }, [searchQuery, currentPage, filters, router]);
+  const { movies, totalPages, isLoading } = discoverMoviesResult;
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -89,20 +40,20 @@ export default function HomePage() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleApplyFilters = (newFilters: FilterValues) => {
-    setFilters(newFilters);
-    setCurrentPage(1);
-    setShowFilters(false);
-  };
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [currentPage]);
 
-  const handleResetFilters = () => {
-    setFilters({ sortBy: "popularity.desc" });
-    setCurrentPage(1);
-    setShowFilters(false);
-  };
+  useEffect(() => {
+    if (searchQuery) {
+      setShowIconFilters(false);
+      setShowFilters(false);
+    } else {
+      setShowIconFilters(true);
+    }
+  }, [searchQuery]);
 
   return (
     <StyledThemeProvider theme={currentTheme}>
@@ -128,15 +79,10 @@ export default function HomePage() {
             onSearch={handleSearch}
             onToggleFilters={() => setShowFilters(!showFilters)}
             initialQuery={searchQuery}
+            showIconFilters={showIconFilters}
           />
 
-          {showFilters && (
-            <Filters
-              onApplyFilters={handleApplyFilters}
-              onResetFilters={handleResetFilters}
-              initialFilters={filters}
-            />
-          )}
+          {showFilters && <Filters />}
 
           {isLoading ? (
             <S.NoResults>Carregando...</S.NoResults>
