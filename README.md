@@ -12,6 +12,8 @@ Este é o projeto **Cubos Movies**, uma aplicação desenvolvida com **Next.js**
 
 ## Estrutura do Projeto
 
+```
+
 A estrutura do projeto está organizada da seguinte forma:
 
 ```
