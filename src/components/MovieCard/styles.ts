@@ -20,70 +20,104 @@ export const PosterContainer = styled.div`
   aspect-ratio: 2/3;
 `;
 
-export const InfoOverlay = styled.div<{ isHovered: boolean }>`
+export const InfoOverlay = styled.div`
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%;
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.5) 50%,
-    rgba(0, 0, 0, 0.8) 100%
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.7) 50%,
+    rgba(0, 0, 0, 0) 100%
   );
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   padding: 1rem;
-  opacity: ${({ isHovered }) => (isHovered ? 1 : 0)};
-  transition: opacity 0.3s ease;
 `;
 
-export const Title = styled.h3`
-  font-size: 1.125rem;
+export const Title = styled.p`
+  font-size: 1rem;
   font-weight: 700;
   color: white;
   margin-bottom: 0.25rem;
-  text-align: center;
+  text-align: left;
   text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  line-height: 1.2;
+  font-family: Montserrat, sans-serif;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 3.6em;
+  max-width: 90%;
 `;
 
-export const GenreText = styled.p`
+export const GenreText = styled.p<{ $isVisible: boolean }>`
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 0.5rem;
-  text-align: center;
+  color: #b4b4b4;
+  text-align: left;
+  font-family: Montserrat, sans-serif;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  max-height: ${({ $isVisible }) => ($isVisible ? "2rem" : "0")};
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 `;
 
-export const RatingContainer = styled.div<{ isHovered: boolean }>`
+export const RatingContainer = styled.div<{ $isVisible: boolean }>`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  transition: opacity 0.3s ease;
+`;
+
+export const RatingCircle = styled.div`
+  position: relative;
+  width: 7rem;
+  height: 7rem;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
-  opacity: ${({ isHovered }) => (isHovered ? 1 : 0)};
-  transition: opacity 0.3s ease;
 `;
 
-export const RatingCircle = styled.div`
-  width: 10rem;
-  height: 10rem;
+export const RatingProgress = styled.div<{ percentage: number }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  background-color: transparent;
-  border: 3px solid #f9ca24;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: ${({ theme, percentage }) => `conic-gradient(
+    ${theme.colors.amber9} ${percentage}%,
+    transparent ${percentage}%
+  )`};
+  mask: radial-gradient(transparent 65%, black 66%);
+  -webkit-mask: radial-gradient(transparent 65%, black 66%);
 `;
 
-export const Rating = styled.span`
+export const RatingText = styled.div`
+  position: relative;
+  z-index: 3;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #f9ca24;
+  color: ${({ theme }) => theme.colors.amber9};
+  text-align: center;
 `;

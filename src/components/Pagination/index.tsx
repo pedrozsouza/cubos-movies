@@ -29,7 +29,7 @@ const Pagination = ({
       buttons.push(
         <S.PageButton
           key={i}
-          isActive={i === currentPage}
+          $isActive={i === currentPage}
           onClick={() => onPageChange(i)}
         >
           {i}

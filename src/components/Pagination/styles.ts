@@ -7,7 +7,7 @@ export const PaginationContainer = styled.div`
   margin: 2rem 0;
 `
 
-export const PageButton = styled.button<{ isActive?: boolean }>`
+export const PageButton = styled.button<{ $isActive?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,14 +15,14 @@ export const PageButton = styled.button<{ isActive?: boolean }>`
   height: 40px;
   margin: 0 0.25rem;
   border-radius: 4px;
-  background-color: ${({ isActive, theme }) => (isActive ? theme.colors.primary : theme.colors.card)};
-  color: ${({ isActive, theme }) => (isActive ? "white" : theme.colors.text.primary)};
-  border: 1px solid ${({ isActive, theme }) => (isActive ? theme.colors.primary : theme.colors.border)};
+  background-color: ${({ $isActive, theme }) => ($isActive ? theme.colors.primary : theme.colors.card)};
+  color: ${({ $isActive, theme }) => ($isActive ? "white" : theme.colors.text.primary)};
+  border: 1px solid ${({ $isActive, theme }) => ($isActive ? theme.colors.primary : theme.colors.border)};
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background-color: ${({ isActive, theme }) => (isActive ? theme.colors.primaryHover : theme.colors.cardHover)};
+    background-color: ${({ $isActive, theme }) => ($isActive ? theme.colors.primaryHover : theme.colors.cardHover)};
   }
 
   &:disabled {

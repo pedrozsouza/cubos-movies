@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import Image from "next/image";
@@ -13,7 +13,6 @@ import { lightTheme, darkTheme } from "@/styles/theme";
 import * as S from "../styles/page/styles";
 import MovieCard from "@/components/MovieCard";
 import { useTheme } from "@/context/ThemeContext";
-import { Movie } from "@/types";
 import {
   useDiscoverMovies,
   usePopularMovies,
@@ -27,106 +26,61 @@ export default function HomePage() {
   const currentTheme = theme === "dark" ? darkTheme : lightTheme;
 
   const initialQuery = searchParams.get("query") || "";
-  const initialPage = Number.parseInt(searchParams.get("page") || "1");
-  const initialYear = searchParams.get("year")
-    ? Number.parseInt(searchParams.get("year") as string)
-    : undefined;
-  const initialGenre = searchParams.get("genre")
-    ? Number.parseInt(searchParams.get("genre") as string)
-    : undefined;
-  const initialSortBy = searchParams.get("sort_by") || "popularity.desc";
+  const initialPage = Number(searchParams.get("page")) || 1;
+  const initialFilters: FilterValues = {
+    year: searchParams.get("year")
+      ? Number(searchParams.get("year"))
+      : undefined,
+    genre: searchParams.get("genre")
+      ? Number(searchParams.get("genre"))
+      : undefined,
+    sortBy: searchParams.get("sort_by") || "popularity.desc",
+  };
 
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState<FilterValues>({
-    year: initialYear,
-    genre: initialGenre,
-    sortBy: initialSortBy,
-  });
+  const [filters, setFilters] = useState(initialFilters);
 
-  const searchParams1 = {
-    query: searchQuery,
-    page: currentPage,
-    year: filters.year,
-  };
-
-  const discoverParams = {
-    page: currentPage,
-    primary_release_year: filters.year,
-    with_genres: filters.genre?.toString(),
-    sort_by: filters.sortBy,
-  };
-
-  const {
-    movies: popularMovies,
-    totalPages: popularTotalPages,
-    isLoading: isLoadingPopular,
-  } = usePopularMovies(currentPage);
-  const {
-    movies: searchResults,
-    totalPages: searchTotalPages,
-    isLoading: isLoadingSearch,
-  } = useSearchMovies(searchParams1);
-  const {
-    movies: discoverResults,
-    totalPages: discoverTotalPages,
-    isLoading: isLoadingDiscover,
-  } = useDiscoverMovies(discoverParams);
-
-
-  let movies: Movie[] = [];
-  let totalPages = 0;
-  let isLoading = false;
-
-  if (searchQuery) {
-    movies = searchResults;
-    totalPages = searchTotalPages;
-    isLoading = isLoadingSearch;
-  } else if (
-    filters.year ||
-    filters.genre ||
-    filters.sortBy !== "popularity.desc"
-  ) {
-    movies = discoverResults;
-    totalPages = discoverTotalPages;
-    isLoading = isLoadingDiscover;
-  } else {
-    movies = popularMovies;
-    totalPages = popularTotalPages;
-    isLoading = isLoadingPopular;
-  }
-
-  
-  const updateUrlParams = (params: Record<string, any>) => {
-    const url = new URL(window.location.href);
-
-    
-    Array.from(url.searchParams.keys()).forEach((key) => {
-      url.searchParams.delete(key);
-    });
-
-    
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== "") {
-        url.searchParams.set(key, value.toString());
-      }
-    });
-
-   
-    window.history.pushState({}, "", url);
-  };
-
-  
-  useEffect(() => {
-    updateUrlParams({
+  // Define os parâmetros de pesquisa dinamicamente
+  const searchParamsObj = useMemo(
+    () => ({
       query: searchQuery,
       page: currentPage,
       year: filters.year,
-      genre: filters.genre,
+    }),
+    [searchQuery, currentPage, filters.year]
+  );
+
+  const discoverParams = useMemo(
+    () => ({
+      page: currentPage,
+      primary_release_year: filters.year,
+      with_genres: filters.genre?.toString(),
       sort_by: filters.sortBy,
-    });
-  }, [searchQuery, currentPage, filters]);
+    }),
+    [currentPage, filters]
+  );
+
+  const popularMoviesResult = usePopularMovies(currentPage);
+  const discoverMoviesResult = useDiscoverMovies(discoverParams);
+
+  const { movies, totalPages, isLoading } = popularMoviesResult;
+
+  // Atualiza os parâmetros da URL
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (searchQuery) params.set("query", searchQuery);
+    if (currentPage > 1) params.set("page", String(currentPage));
+    if (filters.year) params.set("year", String(filters.year));
+    if (filters.genre) params.set("genre", String(filters.genre));
+    if (filters.sortBy && filters.sortBy !== "popularity.desc") {
+      params.set("sort_by", filters.sortBy);
+    }
+
+    router.replace(`?${params.toString()}`);
+  }, [searchQuery, currentPage, filters, router]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -145,9 +99,7 @@ export default function HomePage() {
   };
 
   const handleResetFilters = () => {
-    setFilters({
-      sortBy: "popularity.desc",
-    });
+    setFilters({ sortBy: "popularity.desc" });
     setCurrentPage(1);
     setShowFilters(false);
   };

@@ -1,14 +1,18 @@
-import { SWR_KEYS, type MovieSearchParams } from "@/services/api";
+import useSWR from "swr";
 import type {
+  MovieResponse,
   MovieDetails,
   GenresResponse,
-  MovieResponse,
 } from "@/types/movie";
-import useSWR from "swr";
+import { api } from "@/services/api";
+
+// Define o fetcher diretamente nos hooks
+const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 export function usePopularMovies(page = 1) {
   const { data, error, isLoading, mutate } = useSWR<MovieResponse>(
-    SWR_KEYS.popularMovies(page)
+    `/movie/popular?page=${page}`,
+    fetcher
   );
 
   return {
@@ -21,9 +25,10 @@ export function usePopularMovies(page = 1) {
   };
 }
 
-export function useSearchMovies(params: MovieSearchParams) {
+export function useSearchMovies(query: string, page = 1) {
   const { data, error, isLoading, mutate } = useSWR<MovieResponse>(
-    params.query ? SWR_KEYS.searchMovies(params) : null
+    query ? `/search/movie?query=${query}&page=${page}` : null,
+    fetcher
   );
 
   return {
@@ -36,9 +41,11 @@ export function useSearchMovies(params: MovieSearchParams) {
   };
 }
 
-export function useDiscoverMovies(params: MovieSearchParams) {
+export function useDiscoverMovies(params: Record<string, any>) {
+  const paramString = new URLSearchParams(params).toString();
   const { data, error, isLoading, mutate } = useSWR<MovieResponse>(
-    SWR_KEYS.discoverMovies(params)
+    `/discover/movie?${paramString}`,
+    fetcher
   );
 
   return {
@@ -53,7 +60,8 @@ export function useDiscoverMovies(params: MovieSearchParams) {
 
 export function useMovieDetails(movieId: number | string) {
   const { data, error, isLoading } = useSWR<MovieDetails>(
-    movieId ? SWR_KEYS.movieDetails(movieId) : null
+    movieId ? `/movie/${movieId}?append_to_response=videos,credits` : null,
+    fetcher
   );
 
   return {
@@ -64,7 +72,10 @@ export function useMovieDetails(movieId: number | string) {
 }
 
 export function useGenres() {
-  const { data, error, isLoading } = useSWR<GenresResponse>(SWR_KEYS.genres());
+  const { data, error, isLoading } = useSWR<GenresResponse>(
+    "/genre/movie/list",
+    fetcher
+  );
 
   return {
     genres: data?.genres || [],
