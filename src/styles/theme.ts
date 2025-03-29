@@ -9,6 +9,7 @@ import {
   slateDark,
 } from "@radix-ui/colors";
 
+
 export const lightTheme = {
   colors: {
     ...mauve,
@@ -36,8 +37,8 @@ export const lightTheme = {
       text: "white",
     },
     header: {
-      background: mauve.mauve12,
-      text: mauve.mauve1,
+      background: mauveDark.mauve1,
+      text: mauveDark.mauve12,
     },
     input: {
       background: "white",

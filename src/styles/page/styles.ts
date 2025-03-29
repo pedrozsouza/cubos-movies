@@ -1,33 +1,21 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.text.primary};
-  position: relative;
-  display: flex;
-  flex-direction: column;
-`;
-
-export const BackgroundImage = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  opacity: ${({ theme }) => (theme.theme === "dark" ? 0.1 : 0.05)};
-  pointer-events: none;
-`;
-
-export const Content = styled.main`
+export const Content = styled.div`
   position: relative;
   z-index: 1;
-  max-width: 1200px;
+  max-width: min(
+    90%,
+    1400px
+  );
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 0;
   flex: 1;
   width: 100%;
+
+  @media (max-width: 768px) {
+    max-width: 95%;
+    padding: 1.5rem 0;
+  }
 `;
 
 export const Title = styled.h1`
@@ -44,9 +32,14 @@ export const MoviesGrid = styled.div`
   gap: 1.5rem;
   margin-top: 2rem;
   padding: 1.5rem;
-  background-color: rgba(235, 234, 248, 0.08);
+  background-color: ${({ theme }) =>
+    theme.theme === "dark"
+      ? "rgba(30, 30, 35, 0.2)"
+      : "rgba(255, 255, 255, 0.2)"};
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 1200px) {
     grid-template-columns: repeat(4, 1fr);
@@ -59,6 +52,7 @@ export const MoviesGrid = styled.div`
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+    padding: 1rem;
   }
 
   @media (max-width: 480px) {

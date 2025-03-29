@@ -2,6 +2,7 @@ import { GenresProvider } from "@/context/GenresContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { StyledComponentsRegistry } from "@/lib/registry";
 import { GlobalStyle } from "@/styles/globalStyles";
+import AppLayout from "./authLayout";
 
 export default function RootLayout({
   children,
@@ -15,7 +16,7 @@ export default function RootLayout({
           <ThemeProvider>
             <GenresProvider>
               <GlobalStyle />
-              {children}
+              <AppLayout>{children}</AppLayout>
             </GenresProvider>
           </ThemeProvider>
         </StyledComponentsRegistry>

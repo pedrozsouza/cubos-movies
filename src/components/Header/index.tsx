@@ -8,7 +8,7 @@ import Logo from "../Logo"
 import { useTheme } from "@/context/ThemeContext"
 
 const Header = () => {
-  const { theme, toggleTheme } = useTheme()
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <S.HeaderContainer>
@@ -18,15 +18,11 @@ const Header = () => {
         </S.LogoContainer>
       </Link>
       <S.ThemeToggle onClick={toggleTheme} aria-label="Alternar tema">
-        {theme === "dark" ? (
-          <SunIcon color="#eeeef0" />
-        ) : (
-          <MonIcon color="#eeeef0" />
-        )}
+        {theme === "dark" ? <SunIcon /> : <MonIcon />}
       </S.ThemeToggle>
     </S.HeaderContainer>
   );
-}
+};
 
-export default Header
+export default Header;
 

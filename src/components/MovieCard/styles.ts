@@ -40,7 +40,7 @@ export const InfoOverlay = styled.div`
 export const Title = styled.p`
   font-size: 1rem;
   font-weight: 700;
-  color: white;
+  color: #fdfcfd;
   margin-bottom: 0.25rem;
   text-align: left;
   text-transform: uppercase;

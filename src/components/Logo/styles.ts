@@ -3,14 +3,14 @@ import styled from "styled-components";
 export const LogoContainer = styled.div`
   display: flex;
   align-items: center;
-  text-align: center;
   height: 32px;
 `;
 
 export const LogoSVG = styled.svg`
   width: 120px;
   height: 32px;
-  color: ${({ theme }) => theme.colors.header.text};
+  color: ${({ theme }) =>
+    theme.theme === "dark" ? theme.colors.header.text : theme.colors.mauve12};
 
   path {
     fill: currentColor;
@@ -23,8 +23,9 @@ export const LogoSVG = styled.svg`
 
 export const LogoText = styled.span`
   font-size: 1.1rem;
+  margin-bottom: 0.1rem;
   font-weight: 700;
-  text-align: center;
-  margin: 0 0 0.1rem 0.75rem;
-  color: ${({ theme }) => theme.colors.header.text};
+  margin-left: 0.5rem;
+  color: ${({ theme }) =>
+    theme.theme === "dark" ? theme.colors.header.text : theme.colors.mauve12};
 `;
