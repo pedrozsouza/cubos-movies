@@ -10,16 +10,14 @@ Este é o projeto **Cubos Movies**, uma aplicação desenvolvida com **Next.js**
 - Detalhes de cada filme.
 - Interface responsiva e moderna.
 
-## Estrutura do Projeto
 
 ```
-
+## Estrutura do Projeto
 A estrutura do projeto está organizada da seguinte forma:
 
 ```
 cubos-movies/    # Diretório principal do projeto
   .next/         # Arquivos gerados pelo build do Next.js
-  assets/        # Recursos estáticos como imagens
   public/        # Arquivos públicos acessíveis diretamente
   src/           # Código-fonte principal
     app/         # Configuração da aplicação
@@ -80,4 +78,3 @@ Siga os passos abaixo para configurar e executar o projeto localmente:
    ```
    http://localhost:3000
    ```
-```
