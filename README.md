@@ -1,6 +1,6 @@
 
-```
-# Cubos Movies
+
+## Cubos Movies
 
 Este é o projeto **Cubos Movies**, uma aplicação desenvolvida com **Next.js** para exibir informações sobre filmes. O projeto utiliza boas práticas de desenvolvimento, e uma estrutura modular para facilitar a manutenção e escalabilidade.
 
@@ -11,7 +11,6 @@ Este é o projeto **Cubos Movies**, uma aplicação desenvolvida com **Next.js**
 - Interface responsiva e moderna.
 
 
-```
 ## Estrutura do Projeto
 A estrutura do projeto está organizada da seguinte forma:
 
