@@ -21,8 +21,10 @@ const getKey = (
   genre?: number,
   sortBy?: string
 ) => {
+  const apiPage = Math.ceil(currentPage / 2); 
+
   const params = new URLSearchParams({
-    page: currentPage.toString(),
+    page: apiPage.toString(),
     include_adult: "false",
   });
 
@@ -60,7 +62,7 @@ export function useDiscoverMovies() {
 
 export function useMovieDetails(movieId: number | string) {
   const { data, error, isLoading } = useSWR<MovieDetails>(
-    movieId ? `/movie/${movieId}?append_to_response=videos,credits` : null,
+    movieId ? `/movie/${movieId}?append_to_response=videos,credits` : undefined,
     fetcher
   );
 

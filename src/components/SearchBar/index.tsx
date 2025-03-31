@@ -38,25 +38,24 @@ const SearchBar = ({
 
   return (
     <S.SearchContainer>
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        style={{ width: "100%", display: "flex" }}
-      >
-        <S.SearchInput
-          type="text"
-          placeholder="Pesquise por filmes"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <S.SearchIcon>
-          <SearchIcon />
-        </S.SearchIcon>
+      <S.SearchContent>
+        <S.InputContainer>
+          <S.SearchInput
+            type="text"
+            placeholder="Pesquise por filmes"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <S.SearchIcon>
+            <SearchIcon />
+          </S.SearchIcon>
+        </S.InputContainer>
         {showIconFilters && (
           <S.FilterButton type="button" onClick={onToggleFilters}>
             <FilterIcon />
           </S.FilterButton>
         )}
-      </form>
+      </S.SearchContent>
     </S.SearchContainer>
   );
 };

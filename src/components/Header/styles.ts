@@ -21,7 +21,7 @@ export const LogoContainer = styled.div`
 `;
 
 export const ThemeToggle = styled.button`
-  background: ${({ theme }) => theme.colors.purple8};
+  background: ${({ theme }) => theme.colors.purple4};
   border: none;
   color: #fdfcfd;
   cursor: pointer;
@@ -32,6 +32,10 @@ export const ThemeToggle = styled.button`
   height: 2.5rem;
   border-radius: 50%;
   transition: background-color 0.2s, transform 0.2s;
+
+  svg{
+    color: ${({ theme }) => theme.colors.mauve12};
+  }
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.purple9};

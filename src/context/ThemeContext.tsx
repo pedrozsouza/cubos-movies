@@ -17,7 +17,7 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme | null>(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as Theme | null;
@@ -28,7 +28,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (theme) {
       document.documentElement.setAttribute("data-theme", theme);
       localStorage.setItem("theme", theme);
     }
@@ -37,6 +37,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const toggleTheme = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
+
+  if (theme === null) return null;
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

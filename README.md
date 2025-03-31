@@ -32,6 +32,8 @@ cubos-movies/    # Diretório principal do projeto
     styles/      # Estilos globais e temas
     types/       # Tipos TypeScript
     ui/          # Componentes de interface do usuário
+    utils/       # Funções auxiliares e helpers para reutilização no projeto
+   
 ```
 
 ## Pré-requisitos

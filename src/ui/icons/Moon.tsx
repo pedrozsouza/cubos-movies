@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function MonIcon(props: React.SVGProps<SVGSVGElement>) {
+export default function MoonIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width="24"

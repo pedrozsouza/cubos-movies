@@ -9,3 +9,13 @@ export const FooterContainer = styled.footer`
   margin-top: 2rem;
 `
 
+export const BrandName = styled.span`
+  color: ${({ theme }) => theme.colors.text.secondary};
+  font-weight: 700;
+
+  &:hover {
+    opacity: 0.8;
+    cursor: default;
+  }
+`;
+

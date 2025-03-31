@@ -9,9 +9,11 @@ import { useTheme } from "@/context/ThemeContext";
 import { lightTheme, darkTheme } from "@/styles/theme";
 import { ReactNode } from "react";
 
-
 export default function AppLayout({ children }: { children: ReactNode }) {
   const { theme } = useTheme();
+
+  if (!theme) return null;
+
   const currentTheme = theme === "dark" ? darkTheme : lightTheme;
 
   return (

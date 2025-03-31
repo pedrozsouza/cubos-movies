@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import * as S from "./styles";
 import { useGenresContext } from "@/context/GenresContext";
@@ -18,33 +18,44 @@ const Filters = () => {
   const { genres, isLoading } = useGenresContext();
   const { year, genre, sortBy } = useCurrentFilters();
   const { setFilters, resetFilters } = useFilterActions();
-
-  const yearRef = useRef(year?.toString() || "");
-  const genreRef = useRef(genre?.toString() || "");
-  const sortByRef = useRef(sortBy);
+  const tempYearRef = useRef(year?.toString() || "");
+  const tempGenreRef = useRef(genre?.toString() || "");
+  const tempSortByRef = useRef(sortBy);
+  const [renderKey, setRenderKey] = useState(0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     setFilters({
-      year: yearRef.current ? Number(yearRef.current) : undefined,
-      genre: genreRef.current ? Number(genreRef.current) : undefined,
-      sortBy: sortByRef.current,
+      year: tempYearRef.current ? Number(tempYearRef.current) : undefined,
+      genre: tempGenreRef.current ? Number(tempGenreRef.current) : undefined,
+      sortBy: tempSortByRef.current,
     });
   };
 
   const handleReset = () => {
     resetFilters();
-    yearRef.current = "";
-    genreRef.current = "";
-    sortByRef.current = "popularity.desc";
+    tempYearRef.current = "";
+    tempGenreRef.current = "";
+    tempSortByRef.current = "popularity.desc";
+    setRenderKey((prev) => prev + 1);
   };
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
+   const startYear = 1900;
+   const years = Array.from(
+     { length: currentYear - startYear + 1 },
+     (_, i) => currentYear - i
+   );
+
+  useEffect(() => {
+    tempYearRef.current = year?.toString() || "";
+    tempGenreRef.current = genre?.toString() || "";
+    tempSortByRef.current = sortBy;
+  }, [year, genre, sortBy]);
 
   return (
-    <S.FiltersContainer>
+    <S.FiltersContainer key={renderKey}>
       <S.FiltersTitle>Filtros</S.FiltersTitle>
       <S.FilterForm onSubmit={handleSubmit}>
         <S.FilterGroup>
@@ -52,8 +63,8 @@ const Filters = () => {
           <S.SelectWrapper>
             <S.FilterSelect
               id="year"
-              defaultValue={yearRef.current}
-              onChange={(e) => (yearRef.current = e.target.value)}
+              defaultValue={tempYearRef.current}
+              onChange={(e) => (tempYearRef.current = e.target.value)}
             >
               <option value="">Todos os anos</option>
               {years.map((y) => (
@@ -73,8 +84,8 @@ const Filters = () => {
           <S.SelectWrapper>
             <S.FilterSelect
               id="genre"
-              defaultValue={genreRef.current}
-              onChange={(e) => (genreRef.current = e.target.value)}
+              defaultValue={tempGenreRef.current}
+              onChange={(e) => (tempGenreRef.current = e.target.value)}
             >
               <option value="">Todos os gêneros</option>
               {!isLoading &&
@@ -95,8 +106,8 @@ const Filters = () => {
           <S.SelectWrapper>
             <S.FilterSelect
               id="sortBy"
-              defaultValue={sortByRef.current}
-              onChange={(e) => (sortByRef.current = e.target.value)}
+              defaultValue={tempSortByRef.current}
+              onChange={(e) => (tempSortByRef.current = e.target.value)}
             >
               <option value="popularity.desc">Popularidade (maior)</option>
               <option value="popularity.asc">Popularidade (menor)</option>

@@ -29,14 +29,18 @@ const useFilterStore = create<FilterState>((set) => ({
       set((state) => ({
         filters: { ...state.filters, ...newFilters },
       })),
+
     resetFilters: () =>
       set({
-        filters: { sortBy: "popularity.desc" },
+        filters: {
+          year: undefined,
+          genre: undefined,
+          sortBy: "popularity.desc",
+        },
         currentPage: 1,
       }),
   },
 }));
-
 
 export const useFilterActions = () => useFilterStore((state) => state.actions);
 export const useSearchQuery = () =>

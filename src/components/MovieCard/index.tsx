@@ -28,7 +28,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           {movie.poster_path ? (
             <Image
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title || 'Movie Poster'}
+              alt={movie.title || "Poster do filme"}
               fill
               style={{ objectFit: "cover" }}
             />
@@ -50,7 +50,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           )}
 
           <S.InfoOverlay>
-            <S.Title>{movie?.title?.toUpperCase() || '--'}</S.Title>
+            <S.Title>{movie?.title?.toUpperCase() || "--"}</S.Title>
             <S.GenreText $isVisible={isHovered}>
               {genreNames || "Gênero não disponível"}
             </S.GenreText>
@@ -59,8 +59,10 @@ const MovieCard = ({ movie }: MovieCardProps) => {
 
         <S.RatingContainer $isVisible={isHovered}>
           <S.RatingCircle>
-            <S.RatingProgress percentage={ratingPercentage} />
-            <S.RatingText>{ratingPercentage}%</S.RatingText>
+            <S.RatingProgress $percentage={ratingPercentage} />
+            <S.RatingText $percentage={ratingPercentage}>
+              {ratingPercentage}%
+            </S.RatingText>
           </S.RatingCircle>
         </S.RatingContainer>
       </S.Card>

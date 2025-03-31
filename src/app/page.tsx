@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import SearchBar from "@/components/SearchBar";
 import Pagination from "@/components/Pagination";
 import Filters from "@/components/Filters";
-import * as S from "../styles/page/styles";
+import * as S from "../styles/home/styles";
 import MovieCard from "@/components/MovieCard";
 import { useDiscoverMovies } from "@/hooks/useMovies";
 import {
@@ -69,9 +69,14 @@ export default function HomePage() {
       ) : movies.length > 0 ? (
         <>
           <S.MoviesGrid>
-            {movies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
+            {movies
+              .slice(
+                ((currentPage - 1) % 2) * 10,
+                ((currentPage - 1) % 2) * 10 + 10
+              )
+              .map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
           </S.MoviesGrid>
 
           <Pagination

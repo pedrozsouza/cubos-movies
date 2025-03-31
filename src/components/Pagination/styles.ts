@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const PaginationContainer = styled.div`
   display: flex;
@@ -6,13 +6,13 @@ export const PaginationContainer = styled.div`
   align-items: center;
   margin: 2rem 0;
 
-  .leftArrow{
+  .leftArrow {
     rotate: 270deg;
   }
-  .rightArrow{
+  .rightArrow {
     rotate: 90deg;
   }
-`
+`;
 
 export const PageButton = styled.button<{ $isActive?: boolean }>`
   display: flex;
@@ -22,19 +22,22 @@ export const PageButton = styled.button<{ $isActive?: boolean }>`
   height: 2.3rem;
   margin: 0 0.25rem;
   border-radius: 4px;
-  background-color: ${({ $isActive, theme }) => ($isActive ? theme.colors.primary : theme.colors.card)};
-  color: ${({ $isActive, theme }) => ($isActive ? "white" : theme.colors.text.primary)};
-  border: 1px solid ${({ $isActive, theme }) => ($isActive ? theme.colors.primary : theme.colors.border)};
+  background-color: ${({ $isActive, theme }) =>
+    $isActive ? theme.colors.primary : theme.colors.card};
+  color: ${({ $isActive, theme }) =>
+    $isActive ? "white" : theme.colors.text.primary};
+  border: 1px solid
+    ${({ $isActive, theme }) =>
+      $isActive ? theme.colors.primary : theme.colors.border};
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background-color: ${({ $isActive, theme }) => ($isActive ? theme.colors.primaryHover : theme.colors.cardHover)};
+    background-color: ${({ theme }) => theme.colors.primaryHover};
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-`
-
+`;

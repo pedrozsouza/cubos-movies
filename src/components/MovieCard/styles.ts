@@ -98,26 +98,47 @@ export const RatingCircle = styled.div`
   justify-content: center;
 `;
 
-export const RatingProgress = styled.div<{ percentage: number }>`
+export const RatingProgress = styled.div<{ $percentage: number }>`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: ${({ theme, percentage }) => `conic-gradient(
-    ${theme.colors.amber9} ${percentage}%,
-    transparent ${percentage}%
-  )`};
+  background: ${({ theme, $percentage }) => {
+    let color = theme.colors.tomato9;
+    if ($percentage > 33 && $percentage <= 66) color = theme.colors.amber9;
+    if ($percentage > 66) color = theme.colors.grass9;
+
+    return `conic-gradient(
+      ${color} ${$percentage}%,
+      transparent ${$percentage}%
+    )`;
+  }};
   mask: radial-gradient(transparent 65%, black 66%);
   -webkit-mask: radial-gradient(transparent 65%, black 66%);
+  transition: background 0.3s ease;
 `;
 
-export const RatingText = styled.div`
+export const RatingText = styled.div<{ $percentage?: number }>`
   position: relative;
   z-index: 3;
   font-size: 1.25rem;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors.amber9};
+  color: ${({ theme, $percentage = 0 }) => {
+    if ($percentage > 66) return theme.colors.grass9;
+    if ($percentage > 33) return theme.colors.amber9;
+    return theme.colors.tomato9;
+  }};
   text-align: center;
 `;
+
+export const EmptyStateImage = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+

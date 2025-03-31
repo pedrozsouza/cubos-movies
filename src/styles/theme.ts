@@ -7,6 +7,10 @@ import {
   amberDark,
   slate,
   slateDark,
+  tomato,
+  tomatoDark,
+  grass,
+  grassDark,
 } from "@radix-ui/colors";
 
 
@@ -15,6 +19,8 @@ export const lightTheme = {
     ...mauve,
     ...purple,
     ...amber,
+    ...grass,
+    ...tomato,
     ...slate,
     background: mauve.mauve1,
     foreground: mauve.mauve12,
@@ -59,6 +65,8 @@ export const darkTheme = {
     ...mauveDark,
     ...purpleDark,
     ...amberDark,
+    ...grassDark,
+    ...tomatoDark,
     ...slateDark,
     background: mauveDark.mauve1,
     foreground: mauveDark.mauve12,
