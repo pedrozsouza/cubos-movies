@@ -17,7 +17,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
 
   const genreNames = getGenreNames(movie.genre_ids || []);
   const ratingPercentage = Math.round((movie.vote_average ?? 0) * 10);
-  
+
   return (
     <Link href={`/movie/${movie.id}`} passHref>
       <S.Card
@@ -28,25 +28,16 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           {movie.poster_path ? (
             <Image
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title || "Poster do filme"}
+              alt={movie.title || "Poster do"}
               fill
               style={{ objectFit: "cover" }}
             />
           ) : (
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                backgroundColor: "#3a3a3a",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <S.EmptyStateImage>
               <span style={{ color: "#e0e0e0", fontSize: "0.875rem" }}>
                 Sem imagem
               </span>
-            </div>
+            </S.EmptyStateImage>
           )}
 
           <S.InfoOverlay>
